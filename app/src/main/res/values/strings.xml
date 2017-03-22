@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HelloSensor</string>
     <string name="edit_message">Enter a message</string>
-    <string name="button_send">Send</string>
     <string name="info_message">Hello Sensor!</string>
+    <string name="button_accelerometer">Accelerometer</string>
+    <string name="button_Compass">Kompass</string>
 </resources>
