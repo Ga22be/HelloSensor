@@ -4,6 +4,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.icu.text.DecimalFormat;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     private boolean mLastAccelerometerSet = false;
     private boolean mLastMagnetometerSet = false;
     private long saveTime;
+    private long saveTime2;
     private float linear_acceleration[] = new float[3];
 
     @Override
@@ -48,10 +50,12 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor == accelerometer) {
-            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
+            mLastAccelerometer = MainActivity.lowPass(event.values.clone(), mLastAccelerometer);
+            //System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
             mLastAccelerometerSet = true;
         } else if (event.sensor == magneto) {
-            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
+            mLastMagnetometer = MainActivity.lowPass(event.values.clone(), mLastMagnetometer);
+            //System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
             mLastMagnetometerSet = true;
         }
 
@@ -69,9 +73,13 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         linear_acceleration[1] = event.values[1];// - gravity[1];
         linear_acceleration[2] = event.values[2];// - gravity[2];
 
-        ((TextView) findViewById(R.id.xTextView)).setText(String.valueOf(linear_acceleration[0]));
-        ((TextView) findViewById(R.id.yTextView)).setText(String.valueOf(linear_acceleration[1]));
-        ((TextView) findViewById(R.id.zTextView)).setText(String.valueOf(linear_acceleration[2]));
+        if(System.currentTimeMillis() - saveTime2 > 100){
+        DecimalFormat df = new DecimalFormat("0.##");
+            ((TextView) findViewById(R.id.xTextView)).setText(String.valueOf(df.format(linear_acceleration[0])));
+            ((TextView) findViewById(R.id.yTextView)).setText(String.valueOf(df.format(linear_acceleration[1])));
+            ((TextView) findViewById(R.id.zTextView)).setText(String.valueOf(df.format(linear_acceleration[2])));
+            saveTime2 = System.currentTimeMillis();
+        }
 
         float[] rotationMatrix = new float[9];
         float[] inclinationMatrix = new float[9];
@@ -81,6 +89,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
         ((TextView) findViewById(R.id.inclineTextView)).setText(String.valueOf(inclination-90) + "°");
         ((TextView) findViewById(R.id.inclineTextView2)).setText(String.valueOf(inclination2) + "°");
+
 
         int inclinationUD = (int) Math.round(Math.toDegrees(Math.acos(rotationMatrix[8])));
 

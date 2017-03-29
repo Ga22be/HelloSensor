@@ -64,10 +64,12 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor == mAccelerometer) {
-            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
+            mLastAccelerometer = MainActivity.lowPass(event.values.clone(), mLastAccelerometer);
+            //System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
             mLastAccelerometerSet = true;
         } else if (event.sensor == mMagnetometer) {
-            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
+            mLastMagnetometer = MainActivity.lowPass(event.values.clone(), mLastMagnetometer);
+            //System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
             mLastMagnetometerSet = true;
         }
         if (mLastAccelerometerSet && mLastMagnetometerSet) {
