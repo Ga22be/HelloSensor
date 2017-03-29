@@ -98,30 +98,6 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
                 toneGen2.stopTone();
                 toneGen2.startTone(ToneGenerator.TONE_CDMA_PIP, 100);
             }
-
-            float[] rotationMatrix = new float[9];
-            float[] inclinationMatrix = new float[9];
-            SensorManager.getRotationMatrix(rotationMatrix, inclinationMatrix, mLastAccelerometer, mLastMagnetometer);
-            int inclination = (int) Math.round(Math.toDegrees(Math.acos(rotationMatrix[8])));
-
-            if (inclination < 175)
-            {
-                // face up
-            }
-
-            if (inclination > 175)
-            {
-                if(1000 < (System.currentTimeMillis()-saveTime)) {
-                    saveTime = System.currentTimeMillis();
-                    Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                    // Vibrate for 500 milliseconds
-                    v.vibrate(100);
-
-                    //toneGen1.stopTone();
-                    //toneGen1.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 1000);
-                }
-            }
-                // face down
         }
     }
 

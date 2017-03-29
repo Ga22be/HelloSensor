@@ -4,6 +4,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     private float mLastMagnetometer[] = new float[3];
     private boolean mLastAccelerometerSet = false;
     private boolean mLastMagnetometerSet = false;
-    private float gravity[];
+    private long saveTime;
     private float linear_acceleration[] = new float[3];
 
     @Override
@@ -80,6 +81,27 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
         ((TextView) findViewById(R.id.inclineTextView)).setText(String.valueOf(inclination-90) + "°");
         ((TextView) findViewById(R.id.inclineTextView2)).setText(String.valueOf(inclination2) + "°");
+
+        int inclinationUD = (int) Math.round(Math.toDegrees(Math.acos(rotationMatrix[8])));
+
+        if (inclinationUD < 175)
+        {
+            // face up
+        }
+
+        if (inclinationUD > 175)
+        {
+            if(1000 < (System.currentTimeMillis()-saveTime)) {
+                saveTime = System.currentTimeMillis();
+                Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                // Vibrate for 500 milliseconds
+                v.vibrate(100);
+
+                //toneGen1.stopTone();
+                //toneGen1.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 1000);
+            }
+            // face down
+        }
     }
 
     @Override
