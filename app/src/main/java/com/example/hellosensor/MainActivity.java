@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
-    static final float ALPHA = 0.75f; // if ALPHA = 1 OR 0, no filter applies.
+    static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies.
     public static String EXTRA_MESSAGE = "something";
 
     @Override
