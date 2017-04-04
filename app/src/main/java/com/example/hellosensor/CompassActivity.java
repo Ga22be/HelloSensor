@@ -8,14 +8,10 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Vibrator;
-
-import java.io.Console;
 
 public class CompassActivity extends AppCompatActivity implements SensorEventListener{
 
@@ -30,10 +26,8 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     private float[] mR = new float[9];
     private float[] mOrientation = new float[3];
     private float mCurrentDegree = 0f;
-    private long saveTime;
-    private long saveTime2;
-    ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-    ToneGenerator toneGen2 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+    private float saveTime;
+    ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +59,9 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor == mAccelerometer) {
             mLastAccelerometer = MainActivity.lowPass(event.values.clone(), mLastAccelerometer);
-            //System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
             mLastAccelerometerSet = true;
         } else if (event.sensor == mMagnetometer) {
             mLastMagnetometer = MainActivity.lowPass(event.values.clone(), mLastMagnetometer);
-            //System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
             mLastMagnetometerSet = true;
         }
         if (mLastAccelerometerSet && mLastMagnetometerSet) {
@@ -91,14 +83,14 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             mPointer.startAnimation(ra);
             mCurrentDegree = -azimuthInDegress;
             ((TextView) findViewById(R.id.angleTextView)).setText(String.valueOf(mCurrentDegree));
-            if((mCurrentDegree >= (-45.0) || mCurrentDegree <= (-315.0f)) && 1000 < System.currentTimeMillis()-saveTime2){
-                saveTime2 = System.currentTimeMillis();
-                toneGen2.stopTone();
-                toneGen2.startTone(ToneGenerator.TONE_CDMA_PIP, 500);
-            } else if ((mCurrentDegree >= (-15.0) || mCurrentDegree <= (-345.0f)) && 100 < System.currentTimeMillis()-saveTime2){
-                saveTime2 = System.currentTimeMillis();
-                toneGen2.stopTone();
-                toneGen2.startTone(ToneGenerator.TONE_CDMA_PIP, 100);
+            if((mCurrentDegree >= (-45.0) || mCurrentDegree <= (-315.0f)) && 1000 < System.currentTimeMillis()-saveTime){
+                saveTime = System.currentTimeMillis();
+                toneGen.stopTone();
+                toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 500);
+            } else if ((mCurrentDegree >= (-15.0) || mCurrentDegree <= (-345.0f)) && 100 < System.currentTimeMillis()-saveTime){
+                saveTime = System.currentTimeMillis();
+                toneGen.stopTone();
+                toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 100);
             }
         }
     }

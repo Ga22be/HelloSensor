@@ -65,13 +65,9 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
         final float alpha = (float) 0.8;
 
-        //gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
-        //gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
-        //gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
-
-        linear_acceleration[0] = event.values[0];// - gravity[0];
-        linear_acceleration[1] = event.values[1];// - gravity[1];
-        linear_acceleration[2] = event.values[2];// - gravity[2];
+        linear_acceleration[0] = event.values[0];
+        linear_acceleration[1] = event.values[1];
+        linear_acceleration[2] = event.values[2];
 
         if(System.currentTimeMillis() - saveTime2 > 100){
         DecimalFormat df = new DecimalFormat("0.##");
@@ -103,11 +99,8 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
             if(1000 < (System.currentTimeMillis()-saveTime)) {
                 saveTime = System.currentTimeMillis();
                 Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                // Vibrate for 500 milliseconds
+                // Vibrate for 100 milliseconds
                 v.vibrate(100);
-
-                //toneGen1.stopTone();
-                //toneGen1.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 1000);
             }
             // face down
         }

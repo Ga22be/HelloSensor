@@ -5,9 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Help used:
+ * http://stackoverflow.com/questions/14477133/how-to-use-android-sensor-event-to-determine-if-device-is-facing-up-or-down
+ * https://www.built.io/blog/applying-low-pass-filter-to-android-sensor-s-readings
+ * http://www.techrepublic.com/article/pro-tip-create-your-own-magnetic-compass-using-androids-internal-sensors/
+ * https://developer.android.com/reference/android/hardware/SensorManager.html
+ * https://developer.android.com/reference/android/hardware/SensorEvent.html
+ * http://stackoverflow.com/questions/29509010/how-to-play-a-short-beep-to-android-phones-loudspeaker-programmatically
+ * http://stackoverflow.com/questions/13950338/how-to-make-an-android-device-vibrate
+ */
+
 public class MainActivity extends AppCompatActivity {
     static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies.
-    public static String EXTRA_MESSAGE = "something";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
